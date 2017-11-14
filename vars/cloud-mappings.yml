@@ -1,0 +1,37 @@
+---
+
+cloud_image_map:
+  aws:
+    us-east-1:
+      csr-byol: ami-bcbfb9c7
+      rhel7: ami-c998b6b2
+    us-east-2:
+      csr-byol: ami-541e3931
+      rhel7: ami-0932686c
+    us-west-1:
+      csr-byol: ami-99e5d0f9
+      rhel7: ami-66eec506
+    us-west-2:
+      csr-byol: ami-e4d43d9c
+      rhel7:  ami-9fa343e7
+    ca-central-1:
+      csr-byol: ami-6269d706
+      rhel7: ami-9062d0f4
+
+cloud_instance_map:
+  aws:
+    us-east-1:
+      micro: t2.micro
+      medium: t2.medium
+    us-east-2:
+      micro: t2.micro
+      medium: t2.medium
+    us-west-1:
+      micro: t2.micro
+      medium: t2.medium
+    us-west-2:
+      micro: t2.micro
+      medium: t2.medium
+    ca-central-1:
+      micro: t2.micro
+      medium: t2.medium

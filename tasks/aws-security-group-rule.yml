@@ -1,0 +1,44 @@
+---
+- block:
+  - set_fact:
+      dst_ports: "{{ cloud_security_group_rule.dst_ports }}"
+    when: cloud_security_group_rule.dst_ports is defined
+
+  - set_fact:
+      group_rule:
+        proto: "{{ cloud_security_group_rule.proto }}"
+        from_port: "{{ dst_ports }}"
+        to_port: "{{ dst_ports }}"
+        cidr_ip: "{{ cloud_security_group_rule.src_ip }}"
+    when: cloud_security_group_rule.proto == 'tcp' or cloud_security_group_rule.proto == 'udp'
+
+  - set_fact:
+      group_rule:
+        proto: "{{ cloud_security_group_rule.proto }}"
+        from_port: 8
+        to_port: -1
+        cidr_ip: "{{ cloud_security_group_rule.src_ip }}"
+    when: cloud_security_group_rule.proto == 'icmp'
+
+  - set_fact:
+      group_rule:
+        proto: "{{ cloud_security_group_rule.proto }}"
+        from_port: -1
+        to_port: -1
+        cidr_ip: "{{ cloud_security_group_rule.src_ip }}"
+    when: cloud_security_group_rule.proto == 'all'
+
+  - name: Add rule for security group {{ cloud_security_group_name }}
+    ec2_group:
+      aws_access_key: "{{ aws_access_key | default(omit) }}"
+      aws_secret_key: "{{ aws_secret_key | default(omit) }}"
+      name: "{{ cloud_security_group_name }}"
+      region: "{{ cloud_vpc_data.region }}"
+      description: "{{ cloud_security_group_name }}"
+      purge_rules: no
+      state: present
+      vpc_id: "{{ vpc_id }}"
+      rules: "[{{ group_rule }}]"
+    register: security_group_result
+  tags:
+    - cloud-security-groups
