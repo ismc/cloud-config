@@ -1,24 +1,5 @@
 ---
-- block:
-    - include: "{{ role_path }}/tasks/aws-security-group-rule.yml"
-      with_items: "{{ cloud_security_group_list | default([]) }}"
-      loop_control:
-        loop_var: cloud_security_group_rule
-      tags:
-        - cloud-security-groups
-  when: cloud_state == 'present'
-
-- block:
-    - name: Delete security group {{ cloud_security_group_name }}
-      ec2_group:
-        aws_access_key: "{{ aws_access_key | default(omit) }}"
-        aws_secret_key: "{{ aws_secret_key | default(omit) }}"
-        name: "{{ cloud_security_group_name }}"
-        region: "{{ cloud_vpc_data.region }}"
-        description: "{{ cloud_security_group_name }}"
-        state: absent
-        vpc_id: "{{ vpc_id }}"
-      register: security_group_result
-      tags:
-        - cloud-security-groups
-  when: cloud_state == 'absent'
+- include_tasks: "{{ role_path }}/tasks/aws-security-group-rule.yml"
+  with_items: "{{ cloud_security_group_list | default([]) }}"
+  loop_control:
+    loop_var: cloud_security_group_rule

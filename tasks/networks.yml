@@ -1,2 +1,2 @@
 ---
-- include: "{{ role_path }}/tasks/{{ cloud_vpc_data.provider }}-networks.yml"
+- include_tasks: "{{ role_path }}/tasks/{{ cloud_vpc_data.provider }}-networks.yml"

@@ -31,14 +31,14 @@
       instance_id: "{{ instance_facts.instances[0].id }}"
     when: instance_facts.instances[0] is defined
 
-  - name: Create interface for instance {{ cloud_network_item.vnf_instance }} ID {{ instance_id }} in newtork {{ subnet_id }}
+  - name: Create interface for instance {{ cloud_network_item.vnf_instance }} ID {{ instance_id }} in network {{ subnet_id }}
     ec2_eni:
       aws_access_key: "{{ aws_access_key | default(omit) }}"
       aws_secret_key: "{{ aws_secret_key | default(omit) }}"
       instance_id: "{{ instance_id }}"
       attached: True
       region: "{{ cloud_vpc_data.region }}"
-      device_index: 1
+      device_index: "{{ cloud_network_item.vnf_index | default(omit) }}"
       private_ip_address: "{{ cloud_network_item.inside_ip }}"
       subnet_id: "{{ subnet_id }}"
       state: present

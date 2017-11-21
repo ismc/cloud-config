@@ -5,6 +5,8 @@ cloud_image_map:
     us-east-1:
       csr-byol: ami-bcbfb9c7
       rhel7: ami-c998b6b2
+      pan-demo1: ami-12c89a69
+      eos-eft: ami-b871f4c2
     us-east-2:
       csr-byol: ami-541e3931
       rhel7: ami-0932686c
@@ -23,6 +25,7 @@ cloud_instance_map:
     us-east-1:
       micro: t2.micro
       medium: t2.medium
+      pan-small: m4.xlarge
     us-east-2:
       micro: t2.micro
       medium: t2.medium

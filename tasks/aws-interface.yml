@@ -1,0 +1,51 @@
+---
+- name: Get the subnet ID for subnet {{ cloud_network_item.name }}
+  ec2_vpc_subnet_facts:
+    aws_access_key: "{{ aws_access_key | default(omit) }}"
+    aws_secret_key: "{{ aws_secret_key | default(omit) }}"
+    region: "{{ cloud_vpc_data.region }}"
+    filters:
+      vpc-id: "{{ vpc_id }}"
+      "tag:Name": "{{ cloud_interface_data.subnet }}"
+  register: subnet_facts
+
+- name: Set Subnet ID
+  set_fact:
+    subnet_id: "{{ subnet_facts.subnets[0].id }}"
+  failed_when: subnet_facts.subnets[0] is not defined
+
+- name: Create interface {{ cloud_interface_index }} for instance {{ cloud_instance_item.name }} ID {{ instance_facts.instance_id }} in subnet {{ cloud_interface_data.subnet }}
+  ec2_eni:
+    aws_access_key: "{{ aws_access_key | default(omit) }}"
+    aws_secret_key: "{{ aws_secret_key | default(omit) }}"
+    instance_id: "{{ instance_facts.instance_id }}"
+    attached: True
+    region: "{{ cloud_vpc_data.region }}"
+    device_index: "{{ cloud_interface_index }}"
+    description: "{{ cloud_interface_data.description | default(omit) }}"
+    private_ip_address: "{{ cloud_interface_data.private_ip_address | default(omit) }}"
+    subnet_id: "{{ subnet_id }}"
+    state: present
+    delete_on_termination: true
+    security_groups: "{{ cloud_interface_data.acl | default(omit) }}"
+  register: interface_facts
+
+- name: Associate a public IP with interface {{ interface_facts.interface.id }} index {{ cloud_interface_index }}
+  ec2_eip:
+    region: "{{ cloud_vpc_data.region }}"
+    device_id: "{{ interface_facts.interface.id }}"
+    in_vpc: yes
+    ip: "{{ cloud_interface_data.public_ip if cloud_interface_data.public_ip | ipaddr else omit}}"
+  when: cloud_interface_data.public_ip is defined
+
+- name: Disable Source/Dest check on interface {{ interface_facts.interface.id }}
+  ec2_eni:
+    aws_access_key: "{{ aws_access_key | default(omit) }}"
+    aws_secret_key: "{{ aws_secret_key | default(omit) }}"
+    instance_id: "{{ instance_facts.instance_id }}"
+    eni_id: "{{ interface_facts.interface.id }}"
+    region: "{{ cloud_vpc_data.region }}"
+    subnet_id: "{{ subnet_id }}"
+    source_dest_check: false
+    state: present
+    delete_on_termination: true
