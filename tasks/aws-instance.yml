@@ -57,7 +57,7 @@
       - Role: "{{ cloud_instance_item.role | default(cloud_instance_item.name) }}"
     wait: yes
     vpc_subnet_id: "{{ subnet_map[cloud_instance_item.interfaces[0].subnet] }}"
-    private_ip: "{{ cloud_instance_item.interfaces[0].private_ip_address | default(omit) }}"
+    private_ip: "{{ cloud_instance_item.interfaces[0].private_ip_cidr | ipaddr('address') if cloud_instance_item.interfaces[0].private_ip_cidr is defined else omit }}"
     assign_public_ip: "{{ cloud_instance_item.interfaces[0].public_ip | default(omit) }}"
     user_data: "{{ cloud_instance_item.user_data | default(omit) }}"
   register: instance_results

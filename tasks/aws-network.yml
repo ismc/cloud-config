@@ -27,4 +27,5 @@
     routes:
       - dest: 0.0.0.0/0
         gateway_id: "{{ igw_result.gateway_id }}"
+  # when: cloud_network_item.default | bool
   register: public_route_table
