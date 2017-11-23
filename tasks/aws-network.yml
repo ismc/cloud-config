@@ -20,6 +20,7 @@
     state: present
     vpc_id: "{{ vpc_result.vpc.id }}"
     region: "{{ cloud_vpc_data.region }}"
+    purge_routes: false
     tags:
       Name: "{{ cloud_network_item.name }}"
     subnets:
@@ -27,5 +28,4 @@
     routes:
       - dest: 0.0.0.0/0
         gateway_id: "{{ igw_result.gateway_id }}"
-  # when: cloud_network_item.default | bool
   register: public_route_table

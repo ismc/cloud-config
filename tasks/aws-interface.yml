@@ -51,20 +51,19 @@
         state: present
         delete_on_termination: true
 
-    - name: Set up default route for subnet {{ cloud_network_item.name }} to instance {{ cloud_network_item.vnf_instance }}
+    - name: Set up default route for subnet {{ cloud_network_item.name }} to instance {{ cloud_instance_item.name }}
       ec2_vpc_route_table:
         aws_access_key: "{{ aws_access_key | default(omit) }}"
         aws_secret_key: "{{ aws_secret_key | default(omit) }}"
         vpc_id: "{{ vpc_id }}"
         region: "{{ cloud_vpc_data.region }}"
-        # tags:
-        #   Name: "{{ cloud_interface_data.name | default(cloud_network_item.cidr) }}"
+        purge_routes: true
+        tags:
+          Name: "{{ cloud_interface_data.subnet }}"
         subnets:
           - "{{ subnet_id }}"
         routes:
           - dest: 0.0.0.0/0
             interface_id: "{{ interface_facts.interface.id }}"
       register: private_route_table
-
-    - debug: var=private_route_table
-  when: cloud_interface_data.gateway | bool
+  when: cloud_interface_data.gateway is defined and cloud_interface_data.gateway | bool

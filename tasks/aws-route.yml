@@ -55,7 +55,6 @@
     routes:
       - dest: "{{ cloud_route_item.cidr }}"
         interface_id: "{{ eni_facts.network_interfaces[0].network_interface_id }}"
-        instance_id: "{{ instance_id }}"
   register: private_route_table
 
 - debug: var=private_route_table
