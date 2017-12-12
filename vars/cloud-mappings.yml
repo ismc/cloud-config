@@ -7,6 +7,7 @@ cloud_image_map:
       rhel7: ami-c998b6b2
       pan-demo1: ami-12c89a69
       eos-eft: ami-b871f4c2
+      f5-25-good: ami-18ab2462
     us-east-2:
       csr-byol: ami-541e3931
       rhel7: ami-0932686c
