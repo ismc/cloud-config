@@ -20,6 +20,13 @@ cloud_image_map:
     ca-central-1:
       csr-byol: ami-6269d706
       rhel7: ami-9062d0f4
+  azure:
+    eastus:
+      rhel7: { offer: CentOS, publisher: OpenLogic, sku: 7.4, version: latest }
+      csr-byol: { offer: cisco-csr-1000v, publisher: cisco, product: cisco-csr-1000v, name: csr-azure-byol, sku: csr-azure-byol, version: latest }
+    westus:
+      rhel7: { offer: CentOS, publisher: OpenLogic, sku: 7.4, version: latest }
+      csr-byol: { offer: cisco-csr-1000v, publisher: cisco, product: cisco-csr-1000v, name: csr-azure-byol, sku: csr-azure-byol, version: latest }
 
 cloud_instance_map:
   aws:
@@ -39,3 +46,10 @@ cloud_instance_map:
     ca-central-1:
       micro: t2.micro
       medium: t2.medium
+  azure:
+    eastus:
+      micro: Standard_A0
+      medium: Standard_A2_v2
+    westus:
+      micro: Standard_A0
+      medium: Standard_A2_v2

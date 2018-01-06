@@ -36,8 +36,8 @@
   tags:
     - routes
 
-- include_tasks: "vnfs.yml"
-  vars:
-    cloud_network_data: "{{ vpc_item.networks | default([]) }}"
-  tags:
-    - vnfs
+# - include_tasks: "vnfs.yml"
+#   vars:
+#     cloud_network_data: "{{ vpc_item.networks | default([]) }}"
+#   tags:
+#     - vnfs

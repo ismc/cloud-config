@@ -27,7 +27,7 @@
     subnet_id: "{{ subnet_id }}"
     state: present
     delete_on_termination: true
-    security_groups: "{{ cloud_interface_data.acl | default(omit) }}"
+    security_groups: "{{ cloud_instance_item.interfaces[0].acl | default(omit) }}"
   register: interface_facts
 
 - name: Associate a public IP with interface {{ interface_facts.interface.id }} index {{ cloud_interface_index }}
